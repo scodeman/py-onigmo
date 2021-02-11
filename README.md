@@ -1,1 +1,1 @@
-# py-onigmo
+# Onigmo python package 
