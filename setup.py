@@ -28,8 +28,9 @@ def download_onigmo():
         if response.status != 200:
             raise Exception("failed to download Omigmo")
         ONIGMO_TAR_GZ.write_bytes(response.read())
-        
+
 def move_from(source_dir,target_dir):
+    import shutil
     file_names = os.listdir(source_dir)
     for file_name in file_names:
         try: shutil.move(os.path.join(source_dir, file_name), target_dir)
@@ -72,6 +73,7 @@ setup(
     url="https://github.com/scodeman/py-onigmo",
     keywords=["onigmo", "regular expression"],
     packages=["onigmo"],
+    include_package_data=True,
     classifiers=[
         "License :: BSD License",
         "Programming Language :: Python :: 3",
