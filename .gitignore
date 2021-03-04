@@ -1,0 +1,5 @@
+build
+dist
+Onigmo-*
+*.egg-info
+*.tar.gz
