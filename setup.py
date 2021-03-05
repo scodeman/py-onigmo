@@ -74,7 +74,7 @@ setup(
     packages=["onigmo"],
     include_package_data=True,
     classifiers=[
-        "License :: BSD License",
+        "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
     ],
