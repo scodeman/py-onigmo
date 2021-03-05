@@ -15,7 +15,7 @@ ONIGMO_URL = f"https://github.com/k-takata/Onigmo/archive/{ONIGMO_VERSION}.tar.g
 
 ONIGMO_TAR_GZ = pathlib.Path("onigmo.tar.gz")
 
-ONIGMO_SRC = pathlib.Path("onigmo")
+ONIGMO_SRC = pathlib.Path(f"Onigmo-{ONIGMO_VERSION}")
 
 def get_description():
     with open("README.md", "r") as md:
@@ -42,7 +42,6 @@ class CustomBuild(build_py):
           download_onigmo()
           with tarfile.open(ONIGMO_TAR_GZ, "r:gz") as onigmo_tar_gz:
                onigmo_tar_gz.extractall(path=".")
-               os.symlink(f"Onigmo-{ONIGMO_VERSION}", "onigmo")
         if sys.platform == "win32":
             from distutils import _msvccompiler
             from distutils.util import get_platform
@@ -57,9 +56,9 @@ class CustomBuild(build_py):
             subprocess.check_call(["./autogen.sh"], cwd=ONIGMO_SRC, env=environ)
             subprocess.check_call(["./configure"], cwd=ONIGMO_SRC, env=environ)
             subprocess.check_call(["make"], cwd=ONIGMO_SRC, env=environ)
+            subprocess.check_call(["make", "install"], cwd=ONIGMO_SRC, env=environ)
         else:
             raise Exception(f"cannot build Onigmo for platform {sys.platform!r}")
-        move_from(ONIGMO_SRC / ".libs",ONIGMO_SRC)
         build_py.run(self)
 
 setup(
