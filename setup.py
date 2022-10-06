@@ -41,7 +41,26 @@ class CustomBuild(build_py):
         if not ONIGMO_SRC.exists():
           download_onigmo()
           with tarfile.open(ONIGMO_TAR_GZ, "r:gz") as onigmo_tar_gz:
-               onigmo_tar_gz.extractall(path=".")
+               def is_within_directory(directory, target):
+                   
+                   abs_directory = os.path.abspath(directory)
+                   abs_target = os.path.abspath(target)
+               
+                   prefix = os.path.commonprefix([abs_directory, abs_target])
+                   
+                   return prefix == abs_directory
+               
+               def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
+               
+                   for member in tar.getmembers():
+                       member_path = os.path.join(path, member.name)
+                       if not is_within_directory(path, member_path):
+                           raise Exception("Attempted Path Traversal in Tar File")
+               
+                   tar.extractall(path, members, numeric_owner=numeric_owner) 
+                   
+               
+               safe_extract(onigmo_tar_gz, path=".")
         if sys.platform == "win32":
             from distutils import _msvccompiler
             from distutils.util import get_platform
